@@ -4511,6 +4511,11 @@ int key;
       }
       break;
 #endif
+    case RC_STANDOUTCOLOR:
+      mchar_so.color = atoi(args[0]);
+      RedisplayDisplays(0);
+
+      break;
     default:
 #ifdef HAVE_BRAILLE
       /* key == -2: input from braille keybord, msgok always 0 */

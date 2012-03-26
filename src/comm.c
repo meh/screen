@@ -299,6 +299,7 @@ struct comm comms[RC_LAST + 1] =
   { "sorendition",      ARGS_012 },
   { "source",		ARGS_1 },
   { "split",		NEED_DISPLAY|ARGS_01 },
+  { "standoutcolor",	ARGS_1 },
   { "startup_message",	ARGS_1 },
   { "stuff",		NEED_LAYER|ARGS_012 },
 #ifdef MULTIUSER
