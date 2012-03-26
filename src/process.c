@@ -4513,6 +4513,12 @@ int key;
 #endif
     case RC_STANDOUTCOLOR:
       mchar_so.color = atoi(args[0]);
+
+      IFCOLORX(
+        if (argc == 2)
+          mchar_so.colorx = atoi(args[1]);
+      );
+
       RedisplayDisplays(0);
 
       break;
