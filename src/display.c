@@ -2358,8 +2358,8 @@ int y, from, to, isblank;
 	      SetRendition(&mchar_bars);
 	      if (l > xx - cv->c_xs + 1)
 		l = xx - cv->c_xs + 1;
-	      l = PrePutWinMsg(buf, from - cv->c_xs, l);
-	      from = cv->c_xs + l;
+	      /*l = PrePutWinMsg(buf, from - cv->c_xs, l);*/
+	      /*from = cv->c_xs + l;*/
 	      for (; from <= xx; from++)
 		PUTCHARLP(9490);
 	      break;
