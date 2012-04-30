@@ -113,7 +113,7 @@ extern char *kmapdef[];
 extern char *kmapadef[];
 extern char *kmapmdef[];
 #endif
-extern struct mchar mchar_so, mchar_null;
+extern struct mchar mchar_so, mchar_null, mchar_bars;
 extern int renditions[];
 extern int VerboseCreate;
 #ifdef UTF8
@@ -4522,6 +4522,18 @@ int key;
       RedisplayDisplays(0);
 
       break;
+    case RC_BARSCOLOR:
+      mchar_bars.color = atoi(args[0]);
+
+      IFCOLORX(
+        if (argc == 2)
+          mchar_bars.colorx = atoi(args[1]);
+      );
+
+      RedisplayDisplays(0);
+
+      break;
+
     default:
 #ifdef HAVE_BRAILLE
       /* key == -2: input from braille keybord, msgok always 0 */

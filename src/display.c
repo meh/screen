@@ -76,7 +76,7 @@ extern int  MsgWait, MsgMinWait;
 extern int  Z0width, Z1width;
 extern unsigned char *blank, *null;
 extern struct mline mline_blank, mline_null, mline_old;
-extern struct mchar mchar_null, mchar_blank, mchar_so;
+extern struct mchar mchar_null, mchar_blank, mchar_so, mchar_bars;
 extern struct NewWindow nwin_default;
 extern struct action idleaction;
 
@@ -2355,20 +2355,20 @@ int y, from, to, isblank;
 	      xx = to > cv->c_xe ? cv->c_xe : to;
 	      l = strlen(buf);
 	      GotoPos(from, y);
-	      SetRendition(&mchar_so);
+	      SetRendition(&mchar_bars);
 	      if (l > xx - cv->c_xs + 1)
 		l = xx - cv->c_xs + 1;
 	      l = PrePutWinMsg(buf, from - cv->c_xs, l);
 	      from = cv->c_xs + l;
 	      for (; from <= xx; from++)
-		PUTCHARLP(' ');
+		PUTCHARLP(9490);
 	      break;
 	    }
 	  if (from == cv->c_xe + 1 && y >= cv->c_ys && y <= cv->c_ye + 1)
 	    {
 	      GotoPos(from, y);
-	      SetRendition(&mchar_so);
-	      PUTCHARLP(' ');
+	      SetRendition(&mchar_bars);
+	      PUTCHARLP(y > cv->c_ye ? 9495 : 9497);
 	      from++;
 	      break;
 	    }
@@ -2407,7 +2407,7 @@ int y, from, to, isblank;
 	{
 	  GotoPos(from, y);
 	  SetRendition(&mchar_blank);
-	  PUTCHARLP('|');
+	  PUTCHARLP(9497);
 	  from++;
 	}
       if (lcv->c_layer && yy == lcv->c_layer->l_height)
@@ -2416,7 +2416,7 @@ int y, from, to, isblank;
 	  SetRendition(&mchar_blank);
 	  while (from <= lvp->v_xe && from - lvp->v_xoff < lcv->c_layer->l_width)
 	    {
-	      PUTCHARLP('-');
+	      PUTCHARLP(9490);
 	      from++;
 	    }
 	  if (from >= lvp->v_xe + 1)

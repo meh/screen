@@ -68,6 +68,7 @@ struct comm comms[RC_LAST + 1] =
 #endif
   { "backtick",		ARGS_1|ARGS_ORMORE },
 #ifdef COLOR
+  { "barscolor",	ARGS_12 },
   { "bce",		NEED_FORE|ARGS_01 },
 #endif
 
