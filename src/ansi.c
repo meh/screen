@@ -77,7 +77,7 @@ struct mline mline_null;
 struct mchar mchar_null;
 struct mchar mchar_blank = {' ' /* , 0, 0, ... */};
 struct mchar mchar_so    = {' ', A_SO /* , 0, 0, ... */};
-struct mchar mchar_bars  = {' ', 0, 0, 8};
+struct mchar mchar_bars  = {' ' /* , 0, 0, ... */};
 
 int renditions[NUM_RENDS] = {65529 /* =ub */, 65531 /* =b */, 65533 /* =u */ };
 
