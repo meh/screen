@@ -180,6 +180,7 @@ extern struct mline mline_blank;
 extern struct mline mline_null;
 extern struct mline mline_old;
 
+extern struct mchar mchar_bars;
 extern struct mchar mchar_so;
 extern struct mchar mchar_blank;
 extern struct mchar mchar_null;

@@ -3428,6 +3428,18 @@ void DoAction(struct action *act, int key)
 		}
 		WindowChanged(0, WINESC_BACKTICK);
 		break;
+	case RC_BARSRENDITION:
+		if (args[0]) {
+			i = ParseAttrColor(args[0], 1);
+			if (i == 0)
+				break;
+			ApplyAttrColor(i, &mchar_bars);
+			WindowChanged((Window *)0, 0);
+		}
+		if (msgok)
+			OutputMsg(0, "Bars attributes 0x%02x  colorbg 0x%02x  colorfg 0x%02x", (unsigned char)mchar_bars.attr,
+				  (unsigned char)mchar_bars.colorbg, (unsigned char)mchar_bars.colorfg);
+		break;
 	case RC_BLANKER:
 		if (blankerprg) {
 			RunBlanker(blankerprg);

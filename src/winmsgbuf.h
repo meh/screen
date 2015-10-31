@@ -30,7 +30,7 @@
 /* Default window message buffer size */
 #define WINMSGBUF_SIZE MAXSTR
 
-#define MAX_WINMSG_REND 256 /* rendition changes */
+#define MAX_WINMSG_REND 4096 /* rendition changes */
 
 /* TODO: complete truncation and rendition API */
 

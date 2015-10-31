@@ -48,6 +48,7 @@ struct comm comms[RC_LAST + 1] =
   { "autodetach",	ARGS_1,				{NULL} },
   { "autonuke",		NEED_DISPLAY|ARGS_1,		{NULL} },
   { "backtick",		ARGS_1|ARGS_ORMORE,		{NULL} },
+  { "barsrendition",	ARGS_012,			{NULL} },
   { "bce",		NEED_FORE|ARGS_01,		{NULL} },
   { "bell",		ARGS_01,			{NULL} },
   { "bell_msg",		ARGS_01,			{NULL} },
