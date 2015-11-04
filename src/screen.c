@@ -1531,6 +1531,7 @@ void PutWinMsg(char *s, int start, int max)
 			if (n > max)
 				n = max;
 			max -= n;
+			max += utf8_width(s) - 1;
 			p += n;
 			while (n-- > 0) {
 				if (start-- > 0)

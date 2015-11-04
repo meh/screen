@@ -1559,19 +1559,10 @@ static void RemoveStatusMinWait()
 static int strlen_onscreen(char *c, char *end)
 {
 	int len = 0;
-	while (*c && (!end || c < end)) {
-		int v, dec = 0;
-		do {
-			v = FromUtf8(*c++, &dec);
-			if (v == -2)
-				c--;
-		}
-		while (v < 0 && (!end || c < end));
-		if (!utf8_iscomb(v)) {
-			if (utf8_isdouble(v))
-				len++;
-			len++;
-		}
+
+	while (*c && (!end || c <= end)) {
+		len += utf8_width(c);
+		c   += utf8_size(c);
 	}
 
 	return len;
@@ -1583,11 +1574,11 @@ static int PrePutWinMsg(char *s, int start, int max)
 	   Ideally, this would not be necessary. But fixing it the Right Way will
 	   probably take way more time. So this will have to do for now. */
 	if (D_encoding == UTF8) {
-		int chars = strlen_onscreen((s + start), (s + max));
+		int chars = strlen_onscreen((s + start), NULL);
 		D_encoding = 0;
-		PutWinMsg(s, start, max + ((max - start) - chars));	/* Multibyte count */
+		PutWinMsg(s, start, strlen(s + start));	/* Multibyte count */
 		D_encoding = UTF8;
-		D_x -= (max - chars);	/* Yak! But this is necessary to count for
+		D_x -= strlen(s + start) - chars + 1;	/* Yak! But this is necessary to count for
 					   the fact that not every byte represents a
 					   character. */
 		return start + chars;

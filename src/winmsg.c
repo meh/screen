@@ -43,6 +43,8 @@
 #include "mark.h"
 #include "process.h"
 #include "sched.h"
+#include "mark.h"
+#include "encoding.h"
 
 /* TODO: rid global variable (has been renamed to point this out; see commit
  * history) */
@@ -74,36 +76,57 @@ WinMsgBuf *g_winmsg;
 
 static void _MakeWinMsgEvRec(WinMsgBufContext *, WinMsgCond *, char *, Window *, int *, int);
 
-
 /* TODO: remove the redundant arguments */
 static char *pad_expand(WinMsgBuf *winmsg, char *buf, char *p, int numpad, int padlen)
 {
-	char *pn, *pn2;
-	int i, r;
+	char *pp, *pd, padded[MAXSTR] = {0};
+	int offset, pads, r, i;
 
-	padlen = padlen - (p - buf);	/* space for rent */
-	if (padlen < 0)
-		padlen = 0;
-	pn2 = pn = p + padlen;
-	r = winmsg->numrend;
-	while (p >= buf) {
-		if (r && *p != CHRPAD && p - buf == winmsg->rendpos[r - 1]) {
-			winmsg->rendpos[--r] = pn - buf;
-			continue;
+	pp = buf;
+	while (pp <= p) {
+		if (*pp == CHRPAD) {
+			pp++;
 		}
-		*pn-- = *p;
-		if (*p-- == CHRPAD) {
-			pn[1] = ' ';
-			i = numpad > 0 ? (padlen + numpad - 1) / numpad : 0;
-			padlen -= i;
-			while (i-- > 0)
-				*pn-- = ' ';
-			numpad--;
-			if (r && p - buf == winmsg->rendpos[r - 1])
-				winmsg->rendpos[--r] = pn - buf;
+		else {
+			padlen -= utf8_width(pp);
+			pp     += utf8_size(pp);
 		}
 	}
-	return pn2;
+
+	r = 0;
+	offset = 0;
+	pads = 0;
+	pp = buf;
+	pd = padded;
+
+	while (pp <= p) {
+		if (r < winmsg->numrend && pp - buf == winmsg->rendpos[r]) {
+			winmsg->rendpos[r] += offset;
+			r++;
+			continue;
+		}
+
+		if (*pp == CHRPAD) {
+			i = (padlen / numpad);
+			if (pads == 0 && padlen % 2 == 1)
+				i++;
+			offset += i - 1;
+			while (i-- > 0)
+				*pd++ = ' ';
+			pd--;
+			pads++;
+		}
+		else {
+			*pd = *pp;
+		}
+
+		pp++;
+		pd++;
+	}
+
+	strcpy(buf, padded);
+
+	return p + padlen;
 }
 
 int AddWinMsgRend(WinMsgBuf *winmsg, const char *str, uint64_t r)
@@ -204,7 +227,6 @@ winmsg_esc_ex(PadOrTrunc, int *numpad, int *lastpad, int padlen)
 
 			if (!esc->flags.plus && padlen == 0)
 				esc->num = wmbc->p - winmsg->buf;
-
 			esc->flags.plus = 0;
 		} else if (!esc->flags.zero) {
 			if (**src != WINESC_PAD && esc->num == 0 && !esc->flags.plus)

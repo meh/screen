@@ -2,6 +2,8 @@
 #define SCREEN_ENCODING_H
 
 #include "window.h"
+#include <stdio.h>
+#include <wchar.h>
 
 void  InitBuiltinTabs (void);
 struct mchar *recode_mchar (struct mchar *, int, int);
@@ -26,5 +28,8 @@ int   DecodeChar (int, int, int *);
 int   RecodeBuf (unsigned char *, int, int, int, unsigned char *);
 int   PrepareEncodedChar (int);
 int   EncodeChar (char *, int, int, int *);
+
+int utf8_width(char *buf);
+int utf8_size(char* buf);
 
 #endif /* SCREEN_ENCODING_H */

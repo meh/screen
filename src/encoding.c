@@ -1505,3 +1505,39 @@ void LoadFontTranslationsForEncoding(int encoding)
 	if (f > 0 && recodetabs[f].flags == 0)
 		LoadFontTranslation(f, 0);
 }
+
+int utf8_width(char* buf)
+{
+	wchar_t result = 0;
+
+	if (buf[0] > 0) {
+		return 1;
+	}
+
+	mbtowc(&result, buf, 4);
+	return wcwidth(result);
+}
+
+int utf8_size(char* buf)
+{
+	unsigned char* utf = (unsigned char*) buf;
+
+	if (utf[0] <= 0x7F) {
+		return 1;
+	}
+	else if (utf[0] <= 0xBF) {
+		return 0;
+	}
+	else if (utf[0] <= 0xDF) {
+		return 2;
+	}
+	else if (utf[0] <= 0xEF) {
+		return 3;
+	}
+	else if (utf[0] <= 0xF4) {
+		return 4;
+	}
+	else {
+		return 0;
+	}
+}
